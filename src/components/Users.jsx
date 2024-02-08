@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import {
   Container,
   Grid,
@@ -106,7 +106,7 @@ const UserList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/users/', { withCredentials: true });
+        const response = await api.get('api/users/', { withCredentials: true });
         setUsers(response.data);
       } catch (error) {
         console.error('Error fetching user data:', error);

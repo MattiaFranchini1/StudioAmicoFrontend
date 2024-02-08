@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Axios from 'axios';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,6 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import api from '../services/api';
 
 const pages = ['Products', 'Users', 'About'];
 const settings = ['Profile', 'Logout'];
@@ -45,7 +45,7 @@ function ResponsiveAppBar() {
   useEffect(() => {
     const fetchUserRooms = async () => {
       try {
-        const response = await Axios.get('http://localhost:3000/api/rooms', { withCredentials: true });
+        const response = await api.get('api/rooms', { withCredentials: true });
         setUserRooms(response.data);
       } catch (error) {
         console.error('Errore durante il recupero delle stanze:', error);
@@ -59,7 +59,7 @@ function ResponsiveAppBar() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await Axios.get('http://localhost:3000/api/users/profile', { withCredentials: true });
+        const response = await api.get('api/users/profile', { withCredentials: true });
         //console.log(response.data);
         setUserProfile(response.data.user);
       } catch (error) {
@@ -74,7 +74,7 @@ function ResponsiveAppBar() {
     try {
       setLogoutLoading(true);
 
-      await Axios.get('http://localhost:3000/api/users/logout', { withCredentials: true });
+      await api.get('api/users/logout', { withCredentials: true });
       window.location.href = 'http://localhost:5000/login';
 
       setUserProfile(null);

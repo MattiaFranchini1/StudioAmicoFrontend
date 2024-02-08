@@ -7,11 +7,12 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import InfoIcon from "@mui/icons-material/Info";
 import Container from "@mui/material/Container";
+import api from '../services/api';
 
 const GoogleLoginButton = () => {
   const handleGoogleLogin = () => {
 
-    window.location.href = "http://localhost:3000/api/users/auth/google";
+    window.location.href = `${api.defaults.baseURL}api/users/auth/google`;
   };
 
   return (

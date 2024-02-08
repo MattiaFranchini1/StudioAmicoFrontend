@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import Footer from './components/Footer.jsx';
 import LoginForm from './components/GoogleLogin.jsx';
 import About from './components/About.jsx';
 import Users from './components/Users.jsx';
+import api from './services/api.js';
 
 // ... (importa le librerie necessarie)
 
@@ -15,7 +15,7 @@ const PrivateRoute = ({ element, ...props }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/users/profile', { withCredentials: true });
+        const response = await api.get('api/users/profile', { withCredentials: true });
         setIsAuth(Object.keys(response.data).length !== 0);
       } catch (error) {
         setIsAuth(false);
@@ -39,7 +39,7 @@ const LoginPage = ({ element, ...props }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/users/profile', { withCredentials: true });
+        const response = await api.get('api/users/profile', { withCredentials: true });
         setIsAuth(Object.keys(response.data).length !== 0);
       } catch (error) {
         setIsAuth(false);
