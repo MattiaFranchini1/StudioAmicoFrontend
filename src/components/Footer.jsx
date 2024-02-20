@@ -4,9 +4,9 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import SchoolIcon from "@mui/icons-material/School";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
-
     const links = [
         {
             id: 1,
@@ -18,13 +18,14 @@ export default function Footer() {
             name: 'ITIS Paleocapa',
             link: 'https://www.itispaleocapa.edu.it/',
         },
-    ]
+    ];
+
     return (
         <Box
             sx={{
                 backgroundColor: '#1976d2',
-                p: 0,
-                minHeight: '11%',
+                p: 2,
+                minHeight: '8%',
                 position: 'fixed',
                 bottom: 0,
                 width: '100%',
@@ -63,6 +64,10 @@ export default function Footer() {
                     >
                         <SchoolIcon />
                     </a>
+
+                    <Link to="/about" style={{ color: 'white', textDecoration: 'none', margin: '0 10px' }}>
+                        About Us
+                    </Link>
                 </Box>
             </Container>
         </Box>

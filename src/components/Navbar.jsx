@@ -16,7 +16,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import api from '../services/api';
 
-const pages = ['Products', 'Users', 'About'];
+const pages = ['Rooms', 'Users'];
 const settings = ['Profile', 'Logout'];
 
 function ResponsiveAppBar() {
