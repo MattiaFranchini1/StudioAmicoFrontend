@@ -122,8 +122,8 @@ const UserList = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const filteredUsers = users.filter((user) => {
-    const teachingStars = Math.round(user.teaching_review_total_stars / user.teaching_review_total_number * 2) / 2;
-    const learningStars = Math.round(user.learning_review_total_stars / user.learning_review_total_number * 2) / 2;
+    const teachingStars = isNaN(Math.round(user.teaching_review_total_stars / user.teaching_review_total_number * 2) / 2) ? 0 : Math.round(user.teaching_review_total_stars / user.teaching_review_total_number * 2) / 2;
+    const learningStars = isNaN(Math.round(user.learning_review_total_stars / user.learning_review_total_number * 2) / 2) ? 0 : Math.round(user.learning_review_total_stars / user.learning_review_total_number * 2) / 2;
   
     return (
       user.username.toLowerCase().includes(searchTerm.toLowerCase()) &&
@@ -226,15 +226,6 @@ const UserList = () => {
           </Box>
         </Box>
         <Grid container spacing={3} justifyContent="center">
-          {filteredUsers.map((user) => (
-            <UserCard key={user._id} user={user} />
-          ))}
-          {filteredUsers.map((user) => (
-            <UserCard key={user._id} user={user} />
-          ))}
-          {filteredUsers.map((user) => (
-            <UserCard key={user._id} user={user} />
-          ))}
           {filteredUsers.map((user) => (
             <UserCard key={user._id} user={user} />
           ))}
