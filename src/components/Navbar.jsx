@@ -182,13 +182,13 @@ function ResponsiveAppBar() {
             STUDIO AMICO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <Typography textAlign="center">{page}</Typography>
-                  </Link>
-                </MenuItem>
-              ))}
+            {pages.map((page) => (
+              <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <Link to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Typography textAlign="center">{page}</Typography>
+                </Link>
+              </MenuItem>
+            ))}
 
             <MenuItem sx={{ color: 'white' }}>
               <Autocomplete
@@ -197,7 +197,7 @@ function ResponsiveAppBar() {
                 options={userRooms}
                 getOptionLabel={(option) => option.room_name}
                 sx={{
-                  width: 300,
+                  width: 250,
                   '& .MuiOutlinedInput-root': {
                     borderColor: 'white',
                   },
@@ -246,7 +246,7 @@ function ResponsiveAppBar() {
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={setting === 'Logout' ? handleLogout : handleCloseUserMenu}>
                   {setting === 'Profile' ? (
-                    <Link to="/profile" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Link to={userProfile ? `/user/${userProfile._id}` : '/'} style={{ textDecoration: 'none', color: 'inherit' }}>
                       <Typography textAlign="center">{setting}</Typography>
                     </Link>
                   ) : (
