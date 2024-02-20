@@ -6,6 +6,7 @@ import LoginForm from './components/GoogleLogin.jsx';
 import About from './components/About.jsx';
 import Users from './components/Users.jsx';
 import api from './services/api.js';
+import Rooms from './components/Rooms.jsx'
 import UserProfile from './components/Profile.jsx';
 
 // ... (importa le librerie necessarie)
@@ -70,6 +71,10 @@ function App() {
         <Route
           path="/about"
           element={<PrivateRoute element={<About />} />}
+        />
+        <Route
+          path="/rooms"
+          element={<PrivateRoute element={<Rooms />} />}
         />
         <Route
         path="/user/:id"
