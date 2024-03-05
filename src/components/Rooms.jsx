@@ -25,6 +25,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import Alert from '@mui/material/Alert'
+
 
 export default function Rooms() {
   const [rooms, setRooms] = useState([]);
@@ -105,6 +107,12 @@ export default function Rooms() {
     setOpenModal(false);
   };
 
+  const [showCreateRoomAlert, setShowCreateRoomAlert] = useState(true);
+
+  const handleCloseCreateRoomAlert = () => {
+    setShowCreateRoomAlert(false);
+  };
+
   const filteredRooms = rooms.filter((room) => {
     const nameMatch = room.room_name.toLowerCase().includes(filterName.toLowerCase());
     //console.log("Anno classe ->", filterLevel)
@@ -170,6 +178,21 @@ export default function Rooms() {
         </div>
       </div>
 
+      {showCreateRoomAlert && (
+        <Alert severity="success" variant="filled" onClose={handleCloseCreateRoomAlert} style={{ marginBottom: 20, marginTop: 20 }}>
+          <Typography variant="subtitle1">
+            Vuoi creare tu una stanza?{' '}
+            <Button
+              variant="contained"
+              component={Link}
+              to="/create-room"
+              style={{ marginLeft: 10 }}
+            >
+              Clicca qui
+            </Button>
+          </Typography>
+        </Alert>
+      )}
 
       <div style={{ marginTop: 20 }}></div>
 
@@ -216,7 +239,7 @@ export default function Rooms() {
                         onMouseOver={(e) => (e.currentTarget.style.borderColor = '#2196f3')}
                         onMouseOut={(e) => (e.currentTarget.style.borderColor = 'transparent')}
                       >
-                        <Typography variant="body2"color="#ffffff" style={{ marginRight: 8 }}>
+                        <Typography variant="body2" color="#ffffff" style={{ marginRight: 8 }}>
                           Created by {room.host_user.username}
                         </Typography>
                       </Link>
