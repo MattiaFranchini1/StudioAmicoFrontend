@@ -108,7 +108,7 @@ const UserProfile = () => {
     }
 
     return (
-        <Grid container justifyContent="center" alignItems="center" height="80vh" >
+        <Grid container justifyContent="center" alignItems="center" style={{ minHeight: "80vh", marginBottom: "100px" }}>
             <Grid item xs={12} md={6}>
                 <Box display="flex" flexDirection="column" alignItems="center" height="50%" marginTop="5%">
                     <Avatar
