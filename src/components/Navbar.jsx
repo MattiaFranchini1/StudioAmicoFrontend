@@ -60,7 +60,7 @@ function ResponsiveAppBar() {
     const fetchUserProfile = async () => {
       try {
         const response = await api.get('api/users/profile', { withCredentials: true });
-        //console.log(response.data);
+        console.log(response.data);
         setUserProfile(response.data.user);
       } catch (error) {
         console.error('Errore durante il recupero del profilo:', error);
@@ -75,7 +75,7 @@ function ResponsiveAppBar() {
       setLogoutLoading(true);
 
       await api.get('api/users/logout', { withCredentials: true });
-      window.location.href = 'http://localhost:5000/login';
+      window.location.href = '/login';
 
       setUserProfile(null);
       handleCloseUserMenu();
