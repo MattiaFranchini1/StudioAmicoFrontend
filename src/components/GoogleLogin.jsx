@@ -12,7 +12,7 @@ import api from '../services/api';
 const GoogleLoginButton = () => {
   const handleGoogleLogin = () => {
 
-    window.location.href = `${api.defaults.baseURL}api/users/auth/google`;
+    window.location.href = `${import.meta.env.VITE_BASE_URL}api/users/auth/google`;
   };
 
   return (
