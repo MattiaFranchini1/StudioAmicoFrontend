@@ -82,6 +82,7 @@ const CreateRoom = () => {
         try {
             const response = await api.post('/api/rooms/', roomData, {withCredentials: true});
             console.log('Room created successfully:', response.data);
+            window.location.href = '/rooms';
         } catch (error) {
             console.error('Error creating room:', error);
         }
@@ -102,7 +103,7 @@ const CreateRoom = () => {
             if ((class_level == '3' || class_level == '4')) {
                 return ['Italiano', 'Inglese', 'Informatica', 'Storia', 'Sistemi e reti', 'Telecomunicazioni', 'TEP', 'Matematica'];
             } else {
-                return ['Italiano', 'Inglese', 'Informatica', 'Storia', 'sistemi e reti', 'GEP', 'TEP', 'Matematica'];
+                return ['Italiano', 'Inglese', 'Informatica', 'Storia', 'Sistemi e reti', 'GEP', 'TEP', 'Matematica'];
             }
         } else if (class_type === 'Meccanica') {
             return ['Italiano', 'Inglese', 'Meccanica', 'Storia', 'Disegno', 'Tecnologie', 'Sistemi', 'Matematica'];
