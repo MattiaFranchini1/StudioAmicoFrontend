@@ -26,7 +26,7 @@ export default function Footer() {
                 backgroundColor: '#1976d2',
                 p: 2,
                 minHeight: '8%',
-                position: 'fixed',
+                //position: 'fixed',
                 bottom: 0,
                 width: '100%',
                 display: 'flex',
