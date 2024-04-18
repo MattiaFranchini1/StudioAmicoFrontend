@@ -84,6 +84,12 @@ function ResponsiveAppBar({position}) {
     }
   };
 
+  const handleRoomSelection = (event, value) => {
+    if (value) {
+      window.location.href = `/room/${value._id}`; // Redirect to the selected room
+    }
+  };
+
   return (
     <AppBar position={position}>
       <Container maxWidth="xxl">
@@ -144,6 +150,7 @@ function ResponsiveAppBar({position}) {
                   sx={{
                     width: 300,
                   }}
+                  onChange={handleRoomSelection} // Call handleRoomSelection on selection change
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -205,6 +212,7 @@ function ResponsiveAppBar({position}) {
                     color: 'white',
                   }
                 }}
+                onChange={handleRoomSelection} // Call handleRoomSelection on selection change
                 renderInput={(params) => (
                   <TextField
                     {...params}
