@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -32,11 +32,23 @@ export default function RoomPage() {
     const { roomID } = useParams();
     const [currentUser, setCurrentUser] = useState(null);
 
+    const messagesEndRef = useRef(null);
+
+    // Funzione per scrollare automaticamente al fondo dei messaggi
+    const scrollToBottom = (options) => {
+        messagesEndRef.current?.scrollIntoView( options );
+    };
+
+    useEffect(() => {
+        scrollToBottom({behavior: "smooth"});
+    }, [messages]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await api.get(`/api/rooms/${roomID}`);
                 setRoomData(response.data);
+                scrollToBottom();
                 setError(null);
             } catch (error) {
                 setError(error.response?.status === 500 ? 'Page not found' : 'Error fetching room data');
@@ -255,6 +267,7 @@ export default function RoomPage() {
                                         </div>
                                     </div>
                                 ))}
+                                <div ref={messagesEndRef} />
                             </Box>
 
                             {/* Message input */}
