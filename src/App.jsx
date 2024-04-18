@@ -9,6 +9,7 @@ import api from './services/api.js';
 import Rooms from './components/Rooms.jsx'
 import UserProfile from './components/Profile.jsx';
 import CreateRoom from './components/CreateRoom.jsx'
+import RoomPage from './components/RoomPage.jsx'
 
 // ... (importa le librerie necessarie)
 
@@ -88,6 +89,10 @@ function App() {
         <Route
           path="/create-room"
           element={<PrivateRoute element={<CreateRoom />} />}
+        />
+        <Route
+        path="/room/:roomID"
+        element={<PrivateRoute element={<RoomPage />} />}
         />
       </Routes>
       {/* <Footer /> */}
