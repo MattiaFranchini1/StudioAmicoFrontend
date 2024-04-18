@@ -63,7 +63,7 @@ const LoginPage = ({ element, ...props }) => {
 function App() {
   return (
     <Router>
-      <Navbar />
+      {/* <Navbar position="static"/> */}
       <Routes>
         <Route 
         path="/login" 
@@ -90,7 +90,7 @@ function App() {
           element={<PrivateRoute element={<CreateRoom />} />}
         />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </Router>
   );
 }
