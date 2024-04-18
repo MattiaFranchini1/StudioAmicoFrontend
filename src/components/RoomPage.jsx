@@ -98,11 +98,13 @@ export default function RoomPage() {
 
     const handleSendMessage = async () => {
         try {
-            const profileResponse = await api.get('/api/users/profile', { withCredentials: true });
-            const sender_id = profileResponse.data.user._id;
+            if (message.trim() !== '') {
+                const profileResponse = await api.get('/api/users/profile', { withCredentials: true });
+                const sender_id = profileResponse.data.user._id;
 
-            socket.emit('sendMessage', { room: roomID, sender: sender_id, text: message });
-            setMessage('');
+                socket.emit('sendMessage', { room: roomID, sender: sender_id, text: message });
+                setMessage('');
+            }
         } catch (error) {
             console.error('Error fetching user profile:', error);
         }
