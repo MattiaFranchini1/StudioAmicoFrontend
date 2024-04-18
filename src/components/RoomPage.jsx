@@ -108,6 +108,12 @@ export default function RoomPage() {
         }
     };
 
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSendMessage();
+        }
+    };
+
     return (
         <>
             <Navbar position="fixed" />
@@ -207,7 +213,7 @@ export default function RoomPage() {
                                             </Grid>
                                             <Grid item>
                                                 <Typography variant="h6" sx={{ color: 'white' }}>
-                                                      https://meet.google.com/asj-frth-ksl
+                                                    https://meet.google.com/asj-frth-ksl
                                                 </Typography>
                                             </Grid>
                                         </Grid>
@@ -268,6 +274,7 @@ export default function RoomPage() {
                                     onChange={handleMessageChange}
                                     variant="outlined"
                                     fullWidth
+                                    onKeyPress={handleKeyPress}
                                     placeholder="Write a message..."
                                     sx={{ color: 'white', backgroundColor: 'white', width: '80%' }}
                                     inputProps={{ style: { maxHeight: '40px' } }}
