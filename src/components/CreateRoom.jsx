@@ -15,6 +15,8 @@ import Alert from '@mui/material/Alert';
 import MenuItem from '@mui/material/MenuItem'
 import Autocomplete from '@mui/material/Autocomplete';
 import Chip from '@mui/material/Chip';
+import Navbar from './Navbar.jsx';
+import Footer from './Footer.jsx';
 
 const steps = ['Room Name', 'Class Level', 'Class Type', 'Subjects', 'Resume'];
 
@@ -121,6 +123,8 @@ const CreateRoom = () => {
     };
 
     return (
+        <>
+        <Navbar position="static"/>
         <Container maxWidth="md" style={{ marginTop: '6vh', marginBottom: '20vh' }}>
             <Grid container justifyContent="center" alignItems="center" style={{ height: '100%' }}>
                 <Paper elevation={3} style={{ padding: 20, borderRadius: 10, backgroundColor: 'white', width: '100%' }}>
@@ -260,6 +264,7 @@ const CreateRoom = () => {
                 </Alert>
             </Snackbar>
         </Container >
+        </>
     );
 };
 
