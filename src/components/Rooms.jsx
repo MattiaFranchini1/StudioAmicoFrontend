@@ -26,6 +26,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Alert from '@mui/material/Alert'
+import Navbar from './Navbar.jsx';
+import Footer from './Footer.jsx';
 
 
 export default function Rooms() {
@@ -133,193 +135,196 @@ export default function Rooms() {
   };
 
   return (
-    <Container maxWidth="xl" style={{ marginTop: 20, marginBottom: 150 }}>
+    <>
+      <Navbar position="static" />
+      <Container maxWidth="xl" style={{ marginTop: 20, marginBottom: 150 }}>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', padding: '10px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'white', padding: '10px' }}>
 
-        <div style={{ marginRight: 10 }}>
-          <InputBase
-            placeholder="Search by room name"
-            value={filterName}
-            onChange={handleFilterNameChange}
-          />
-          <IconButton type="submit" aria-label="search">
-            <SearchIcon />
-          </IconButton>
-        </div>
+          <div style={{ marginRight: 10 }}>
+            <InputBase
+              placeholder="Search by room name"
+              value={filterName}
+              onChange={handleFilterNameChange}
+            />
+            <IconButton type="submit" aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </div>
 
-        <div style={{ marginRight: 10 }}>
-          <Select
-            value={filterLevel}
-            onChange={handleFilterLevelChange}
-            displayEmpty
-            inputProps={{ 'aria-label': 'Without label' }}
-          >
-            <MenuItem value="" disabled>
-              Filter by Level
-            </MenuItem>
-            {[1, 2, 3, 4, 5].map((level) => (
-              <MenuItem key={level} value={level}>
-                {level}
-              </MenuItem>
-            ))}
-          </Select>
-        </div>
-
-        <div style={{ marginRight: 10 }}>
-          <InputBase
-            placeholder="Filter by Class Type"
-            value={filterClassType}
-            onChange={handleFilterClassTypeChange}
-          />
-          <IconButton type="submit" aria-label="search">
-            <SearchIcon />
-          </IconButton>
-        </div>
-      </div>
-
-      {showCreateRoomAlert && (
-        <Alert severity="success" variant="filled" onClose={handleCloseCreateRoomAlert} style={{ marginBottom: 20, marginTop: 20 }}>
-          <Typography variant="subtitle1">
-            Vuoi creare tu una stanza?{' '}
-            <Button
-              variant="contained"
-              component={Link}
-              to="/create-room"
-              style={{ marginLeft: 10 }}
+          <div style={{ marginRight: 10 }}>
+            <Select
+              value={filterLevel}
+              onChange={handleFilterLevelChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Without label' }}
             >
-              Clicca qui
-            </Button>
-          </Typography>
-        </Alert>
-      )}
+              <MenuItem value="" disabled>
+                Filter by Level
+              </MenuItem>
+              {[1, 2, 3, 4, 5].map((level) => (
+                <MenuItem key={level} value={level}>
+                  {level}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
 
-      <div style={{ marginTop: 20 }}></div>
-
-      {loading ? (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
-          <Box
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-            minHeight="60vh"
-          >
-            <CircularProgress color="primary" size={80} thickness={4} />
-            <Typography variant="h6" color="white" style={{ marginTop: 16 }}>
-              Stiamo recuperando tutte le informazioni riguardo le stanze...
-            </Typography>
-          </Box>
+          <div style={{ marginRight: 10 }}>
+            <InputBase
+              placeholder="Filter by Class Type"
+              value={filterClassType}
+              onChange={handleFilterClassTypeChange}
+            />
+            <IconButton type="submit" aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </div>
         </div>
-      ) : (
-        <Grid container spacing={2}>
-          {filteredRooms.map((room) => (
-            <Grid item key={room._id} xs={12} sm={6} md={4} lg={3}>
-              <Card style={{ marginBottom: 15, backgroundColor: '#212121', color: '#ffffff', height: '95%' }}>
-                <CardHeader
-                  title={
-                    <Typography
-                      variant="h5"
-                      align="center"
-                      style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', textTransform: 'uppercase' }}
-                    >
-                      {room.room_name}
-                    </Typography>
-                  }
-                  subheader={
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Link
-                        to={`/user/${room.host_user._id}`}
-                        style={{
-                          textDecoration: 'none',
-                          color: 'inherit',
-                          borderBottom: '1px solid transparent',
-                          transition: 'border-color 0.2s',
-                        }}
-                        onMouseOver={(e) => (e.currentTarget.style.borderColor = '#2196f3')}
-                        onMouseOut={(e) => (e.currentTarget.style.borderColor = 'transparent')}
+
+        {showCreateRoomAlert && (
+          <Alert severity="success" variant="filled" onClose={handleCloseCreateRoomAlert} style={{ marginBottom: 20, marginTop: 20 }}>
+            <Typography variant="subtitle1">
+              Vuoi creare tu una stanza?{' '}
+              <Button
+                variant="contained"
+                component={Link}
+                to="/create-room"
+                style={{ marginLeft: 10 }}
+              >
+                Clicca qui
+              </Button>
+            </Typography>
+          </Alert>
+        )}
+
+        <div style={{ marginTop: 20 }}></div>
+
+        {loading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+              minHeight="60vh"
+            >
+              <CircularProgress color="primary" size={80} thickness={4} />
+              <Typography variant="h6" color="white" style={{ marginTop: 16 }}>
+                Stiamo recuperando tutte le informazioni riguardo le stanze...
+              </Typography>
+            </Box>
+          </div>
+        ) : (
+          <Grid container spacing={2}>
+            {filteredRooms.map((room) => (
+              <Grid item key={room._id} xs={12} sm={6} md={4} lg={3}>
+                <Card style={{ marginBottom: 15, backgroundColor: '#212121', color: '#ffffff', height: '95%' }}>
+                  <CardHeader
+                    title={
+                      <Typography
+                        variant="h5"
+                        align="center"
+                        style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', textTransform: 'uppercase' }}
                       >
-                        <Typography variant="body2" color="#ffffff" style={{ marginRight: 8 }}>
-                          Created by {room.host_user.username}
+                        {room.room_name}
+                      </Typography>
+                    }
+                    subheader={
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <Link
+                          to={`/user/${room.host_user._id}`}
+                          style={{
+                            textDecoration: 'none',
+                            color: 'inherit',
+                            borderBottom: '1px solid transparent',
+                            transition: 'border-color 0.2s',
+                          }}
+                          onMouseOver={(e) => (e.currentTarget.style.borderColor = '#2196f3')}
+                          onMouseOut={(e) => (e.currentTarget.style.borderColor = 'transparent')}
+                        >
+                          <Typography variant="body2" color="#ffffff" style={{ marginRight: 8 }}>
+                            Created by {room.host_user.username}
+                          </Typography>
+                        </Link>
+                        <Avatar
+                          alt={room.host_user.username}
+                          src={room.host_user.profile_image_url}
+                          sx={{
+                            width: 24,
+                            height: 24,
+                          }}
+                        />
+                      </div>
+                    }
+                  />
+                  <Divider />
+                  <CardContent>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <Typography variant="body2" color="#ffffff" align="center">
+                          <strong>Class:</strong> {room.class_level}° {room.class_type}
                         </Typography>
-                      </Link>
-                      <Avatar
-                        alt={room.host_user.username}
-                        src={room.host_user.profile_image_url}
-                        sx={{
-                          width: 24,
-                          height: 24,
-                        }}
-                      />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography variant="body2" color="#ffffff" align="center">
+                          <strong>Participants:</strong>
+                          <Badge badgeContent={room.participants.length} color="primary" size="small">
+                            <PeopleIcon fontSize="small" />
+                          </Badge>
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', marginTop: 20 }}>
+                      {room.subject.map((subject) => (
+                        <Chip key={subject} label={subject} style={{ margin: 4, backgroundColor: '#c0c0c0' }} />
+                      ))}
                     </div>
-                  }
-                />
-                <Divider />
-                <CardContent>
-                  <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                      <Typography variant="body2" color="#ffffff" align="center">
-                        <strong>Class:</strong> {room.class_level}° {room.class_type}
+                  </CardContent>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10, marginRight: 10 }}>
+                    {isUserAlreadyJoined(room) ? (
+                      <Typography>
+                        Già unito
                       </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Typography variant="body2" color="#ffffff" align="center">
-                        <strong>Participants:</strong>
-                        <Badge badgeContent={room.participants.length} color="primary" size="small">
-                          <PeopleIcon fontSize="small" />
-                        </Badge>
-                      </Typography>
-                    </Grid>
-                  </Grid>
-                  <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', marginTop: 20 }}>
-                    {room.subject.map((subject) => (
-                      <Chip key={subject} label={subject} style={{ margin: 4, backgroundColor: '#c0c0c0' }} />
-                    ))}
+                    ) : (
+                      <Button variant="outlined" color="primary" startIcon={<GroupAddOutlinedIcon />} onClick={() => handleOpenModal(room)}>
+                        Unisciti
+                      </Button>
+                    )}
                   </div>
-                </CardContent>
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10, marginRight: 10 }}>
-                  {isUserAlreadyJoined(room) ? (
-                    <Typography>
-                      Già unito
-                    </Typography>
-                  ) : (
-                    <Button variant="outlined" color="primary" startIcon={<GroupAddOutlinedIcon />} onClick={() => handleOpenModal(room)}>
-                      Unisciti
-                    </Button>
-                  )}
-                </div>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
 
-      <Dialog open={openModal} onClose={handleCloseModal}>
-        <DialogTitle>{selectedRoom.room_name}</DialogTitle>
-        <DialogContent>
-          <Typography>
-            Sei sicuro di voler unirti a questa stanza?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseModal} color="error" variant="outlined">
-            Annulla
-          </Button>
-          <Button
-            onClick={() => {
-              handleJoinRoom(selectedRoom._id);
-              handleCloseModal();
-            }}
-            color="success"
-            variant="contained"
-            autoFocus
-          >
-            Conferma
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog open={openModal} onClose={handleCloseModal}>
+          <DialogTitle>{selectedRoom.room_name}</DialogTitle>
+          <DialogContent>
+            <Typography>
+              Sei sicuro di voler unirti a questa stanza?
+            </Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseModal} color="error" variant="outlined">
+              Annulla
+            </Button>
+            <Button
+              onClick={() => {
+                handleJoinRoom(selectedRoom._id);
+                handleCloseModal();
+              }}
+              color="success"
+              variant="contained"
+              autoFocus
+            >
+              Conferma
+            </Button>
+          </DialogActions>
+        </Dialog>
 
 
-    </Container>
-  );
+      </Container>
+      </>
+      );
 }
