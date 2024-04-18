@@ -14,6 +14,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import Navbar from './Navbar.jsx';
+import Footer from './Footer.jsx';
 
 
 const UserProfile = () => {
@@ -108,94 +110,97 @@ const UserProfile = () => {
     }
 
     return (
-        <Grid container justifyContent="center" alignItems="center" style={{ minHeight: "80vh", marginBottom: "100px" }}>
-            <Grid item xs={12} md={6}>
-                <Box display="flex" flexDirection="column" alignItems="center" height="50%" marginTop="5%">
-                    <Avatar
-                        alt={userData.username}
-                        src={userData.profile_image_url.slice(0, -6)}
-                        style={{ width: '50%', height: 'auto', maxWidth: 1000 }}
-                    />
-                    {isProfile && (
-                        <Box marginTop={2}>
-                            <Button variant="outlined" onClick={handleOpenModal}>Edit profile</Button>
-                        </Box>
-                    )}
-                </Box>
-            </Grid>
-            <Grid item xs={12} md={5}>
-                <Box padding={3}>
-                    <Typography variant="h4">{userData.username} ({userData.class})</Typography>
-                    <Link href={`mailto:${userData.email}`}>
-                        {userData.email}
-                    </Link>
-                    <Typography variant="subtitle2">
-                        Utente dal {new Date(userData.registered_at).toLocaleDateString()}
-                    </Typography>
-                    <Box marginTop={4} />
-                    <Typography variant="body1" align="justify">{userData.bio}</Typography>
+        <>
+            <Navbar position="static" />
+            <Grid container justifyContent="center" alignItems="center" style={{ minHeight: "80vh", marginBottom: "100px" }}>
+                <Grid item xs={12} md={6}>
+                    <Box display="flex" flexDirection="column" alignItems="center" height="50%" marginTop="5%">
+                        <Avatar
+                            alt={userData.username}
+                            src={userData.profile_image_url.slice(0, -6)}
+                            style={{ width: '50%', height: 'auto', maxWidth: 1000 }}
+                        />
+                        {isProfile && (
+                            <Box marginTop={2}>
+                                <Button variant="outlined" onClick={handleOpenModal}>Edit profile</Button>
+                            </Box>
+                        )}
+                    </Box>
+                </Grid>
+                <Grid item xs={12} md={5}>
+                    <Box padding={3}>
+                        <Typography variant="h4">{userData.username} ({userData.class})</Typography>
+                        <Link href={`mailto:${userData.email}`}>
+                            {userData.email}
+                        </Link>
+                        <Typography variant="subtitle2">
+                            Utente dal {new Date(userData.registered_at).toLocaleDateString()}
+                        </Typography>
+                        <Box marginTop={4} />
+                        <Typography variant="body1" align="justify">{userData.bio}</Typography>
 
-                    <Box display="flex" marginTop={7}>
-                        {/* Teaching Stats */}
-                        <Box>
-                            <Typography variant="subtitle2">
-                                Teaching Stats
-                            </Typography>
-                            <Rating
-                                name="teaching-rating"
-                                value={userData.teaching_review_total_stars / userData.teaching_review_total_number}
-                                readOnly
-                                size="medium"
-                                precision={0.5}
-                            />
-                            <Typography variant="subtitle2">
-                                ({userData.teaching_review_total_number} reviews)
-                            </Typography>
-                        </Box>
+                        <Box display="flex" marginTop={7}>
+                            {/* Teaching Stats */}
+                            <Box>
+                                <Typography variant="subtitle2">
+                                    Teaching Stats
+                                </Typography>
+                                <Rating
+                                    name="teaching-rating"
+                                    value={userData.teaching_review_total_stars / userData.teaching_review_total_number}
+                                    readOnly
+                                    size="medium"
+                                    precision={0.5}
+                                />
+                                <Typography variant="subtitle2">
+                                    ({userData.teaching_review_total_number} reviews)
+                                </Typography>
+                            </Box>
 
-                        {/* Learning Stats */}
-                        <Box marginLeft={2}>
-                            <Typography variant="subtitle2">
-                                Learning Stats
-                            </Typography>
-                            <Rating
-                                name="learning-rating"
-                                value={userData.learning_review_total_stars / userData.learning_review_total_number}
-                                readOnly
-                                size="medium"
-                                precision={0.5}
-                            />
-                            <Typography variant="subtitle2">
-                                ({userData.learning_review_total_number} reviews)
-                            </Typography>
+                            {/* Learning Stats */}
+                            <Box marginLeft={2}>
+                                <Typography variant="subtitle2">
+                                    Learning Stats
+                                </Typography>
+                                <Rating
+                                    name="learning-rating"
+                                    value={userData.learning_review_total_stars / userData.learning_review_total_number}
+                                    readOnly
+                                    size="medium"
+                                    precision={0.5}
+                                />
+                                <Typography variant="subtitle2">
+                                    ({userData.learning_review_total_number} reviews)
+                                </Typography>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
+                </Grid>
+
+                <Dialog open={openModal} onClose={handleCloseModal} PaperProps={{ sx: { width: '80%', maxWidth: 'md' } }}>
+                    <DialogTitle>Edit Profile Bio</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            multiline
+                            rows={4}
+                            fullWidth
+                            variant="outlined"
+                            value={bioEditValue}
+                            onChange={handleBioEditChange}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleCloseModal} color="error" variant="outlined">
+                            Annulla
+                        </Button>
+                        <Button color="success" variant="contained" onClick={handleSaveBio}>
+                            Conferma
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
             </Grid>
-
-            <Dialog open={openModal} onClose={handleCloseModal} PaperProps={{ sx: { width: '80%', maxWidth: 'md' } }}>
-                <DialogTitle>Edit Profile Bio</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        multiline
-                        rows={4}
-                        fullWidth
-                        variant="outlined"
-                        value={bioEditValue}
-                        onChange={handleBioEditChange}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseModal} color="error" variant="outlined">
-                        Annulla
-                    </Button>
-                    <Button color="success" variant="contained" onClick={handleSaveBio}>
-                        Conferma
-                    </Button>
-                </DialogActions>
-            </Dialog>
-
-        </Grid>
+        </>
     );
 };
 
