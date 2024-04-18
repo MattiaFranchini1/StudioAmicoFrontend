@@ -9,7 +9,6 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -19,7 +18,7 @@ import api from '../services/api';
 const pages = ['Rooms', 'Users'];
 const settings = ['Profile', 'Logout'];
 
-function ResponsiveAppBar() {
+function ResponsiveAppBar({position}) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [userRooms, setUserRooms] = useState([]);
@@ -55,7 +54,6 @@ function ResponsiveAppBar() {
     fetchUserRooms();
   }, []);
 
-
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -87,10 +85,9 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position={position}>
       <Container maxWidth="xxl">
         <Toolbar disableGutters>
-
           <Typography
             variant="h6"
             noWrap
@@ -261,4 +258,5 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
