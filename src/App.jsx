@@ -10,6 +10,7 @@ import Rooms from './components/Rooms.jsx'
 import UserProfile from './components/Profile.jsx';
 import CreateRoom from './components/CreateRoom.jsx'
 import RoomPage from './components/RoomPage.jsx'
+import HomePage from './components/HomePage.jsx'
 
 // ... (importa le librerie necessarie)
 
@@ -66,9 +67,13 @@ function App() {
     <Router>
       {/* <Navbar position="static"/> */}
       <Routes>
-        <Route 
-        path="/login" 
-        element={<LoginPage element={<LoginForm />} />}
+        <Route
+          path="/login"
+          element={<LoginPage element={<LoginForm />} />}
+        />
+        <Route
+          path="/"
+          element={<PrivateRoute element={<HomePage />} />}
         />
         <Route
           path="/about"
@@ -79,8 +84,8 @@ function App() {
           element={<PrivateRoute element={<Rooms />} />}
         />
         <Route
-        path="/user/:id"
-        element={<PrivateRoute element={<UserProfile />} />}
+          path="/user/:id"
+          element={<PrivateRoute element={<UserProfile />} />}
         />
         <Route
           path="/users"
@@ -91,8 +96,8 @@ function App() {
           element={<PrivateRoute element={<CreateRoom />} />}
         />
         <Route
-        path="/room/:roomID"
-        element={<PrivateRoute element={<RoomPage />} />}
+          path="/room/:roomID"
+          element={<PrivateRoute element={<RoomPage />} />}
         />
       </Routes>
       {/* <Footer /> */}
