@@ -6,6 +6,7 @@ import { useTheme } from "@mui/material/styles";
 import Avatar from "@mui/material/Avatar";
 import Divider from "@mui/material/Divider";
 import { Link } from "react-router-dom";
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useParams } from "react-router-dom";
 import Typography from '@mui/material/Typography';
@@ -18,10 +19,18 @@ import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
 import Alert from "@mui/material/Alert";
 import Grid from '@mui/material/Grid';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const socket = io(`${import.meta.env.VITE_BASE_URL}`);
 
 export default function RoomPage() {
+    const [highlightedMessage, setHighlightedMessage] = useState(null);
+
+    const [menuAnchorEl, setMenuAnchorEl] = useState(null);
+    const [selectedMessage, setSelectedMessage] = useState(null);
     const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -33,8 +42,24 @@ export default function RoomPage() {
     const [messages, setMessages] = useState([]);
     const { roomID } = useParams();
     const [currentUser, setCurrentUser] = useState(null);
-
     const messagesEndRef = useRef(null);
+
+    const handleMouseEnter = (messageId) => {
+        setHighlightedMessage(messageId);
+    };
+    const handleMouseLeave = () => {
+        setHighlightedMessage(null);
+    };
+
+    const handleMenuOpen = (event, messageId) => {
+        setMenuAnchorEl(event.currentTarget);
+        setSelectedMessage(messageId);
+    };
+
+    const handleMenuClose = () => {
+        setMenuAnchorEl(null);
+        setSelectedMessage(null);
+    };
 
     const scrollToBottom = (options) => {
         messagesEndRef.current?.scrollIntoView(options);
@@ -80,6 +105,13 @@ export default function RoomPage() {
             setError(null);
         };
     }, [roomID]);
+
+    useEffect(() => {
+        return () => {
+            setMenuAnchorEl(null);
+            setSelectedMessage(null);
+        };
+    }, []);
 
 
     useEffect(() => {
@@ -249,15 +281,64 @@ export default function RoomPage() {
                                                 {message.sender_user.username.charAt(0)}
                                             </Avatar>
                                         </div>
-                                        <div style={{ backgroundColor: '#202225', borderRadius: '16px', padding: '8px', maxWidth: '50%' }}> {/* Aggiunto borderRadius */}
+                                        <div onMouseEnter={() => handleMouseEnter(message._id)} onMouseLeave={handleMouseLeave} style={{ backgroundColor: '#202225', borderRadius: '16px', padding: '8px', maxWidth: '50%' }}> {/* Aggiunto borderRadius */}
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: message.sender_user._id === currentUser ? 'flex-end' : 'flex-start', marginBottom: theme.spacing(1) }}>
                                                 {message.sender_user._id !== currentUser && (
                                                     <>
                                                         <Typography variant="body2" sx={{ color: '#539fec', marginRight: theme.spacing(1) }}>{message.sender_user.username}</Typography>
+                                                        {highlightedMessage === message._id && (
+                                                            <IconButton size="small" onClick={(event) => handleMenuOpen(event, message._id)} sx={{ color: 'white' }}>
+                                                                <MoreVertIcon />
+                                                            </IconButton>
+                                                        )}
+                                                        <Menu
+                                                            anchorEl={menuAnchorEl}
+                                                            open={Boolean(menuAnchorEl) && selectedMessage === message._id}
+                                                            onClose={handleMenuClose}
+                                                            PaperProps={{
+                                                                elevation: 0,
+                                                                sx: {
+                                                                    backgroundColor: '#333',
+                                                                    minWidth: '140px',
+                                                                },
+                                                            }}
+                                                        >
+                                                            <MenuItem onClick={handleMenuClose} sx={{ color: 'white', fontSize: '14px' }}>
+                                                                <DeleteIcon sx={{ marginRight: '8px' }} />
+                                                                Elimina
+                                                            </MenuItem>
+                                                        </Menu>
+
                                                     </>
                                                 )}
                                                 {message.sender_user._id === currentUser && (
                                                     <>
+                                                        {highlightedMessage === message._id && (
+                                                            <IconButton size="small" onClick={(event) => handleMenuOpen(event, message._id)} sx={{ color: 'white' }}>
+                                                                <MoreVertIcon />
+                                                            </IconButton>
+                                                        )}
+                                                        <Menu
+                                                            anchorEl={menuAnchorEl}
+                                                            open={Boolean(menuAnchorEl) && selectedMessage === message._id}
+                                                            onClose={handleMenuClose}
+                                                            PaperProps={{
+                                                                elevation: 0,
+                                                                sx: {
+                                                                    backgroundColor: '#333',
+                                                                    minWidth: '140px',
+                                                                },
+                                                            }}
+                                                        >
+                                                            <MenuItem onClick={handleMenuClose} sx={{ color: 'white', fontSize: '14px' }}>
+                                                                <EditIcon sx={{ marginRight: '8px' }} />
+                                                                Modifica
+                                                            </MenuItem>
+                                                            <MenuItem onClick={handleMenuClose} sx={{ color: 'white', fontSize: '14px' }}>
+                                                                <DeleteIcon sx={{ marginRight: '8px' }} />
+                                                                Elimina
+                                                            </MenuItem>
+                                                        </Menu>
                                                         <Typography variant="body2" sx={{ color: '#539fec', marginLeft: theme.spacing(1) }}>{message.sender_user.username} (TU)</Typography>
                                                     </>
                                                 )}
