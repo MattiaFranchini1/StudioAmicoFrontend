@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from 'react-router-dom';
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -21,6 +22,7 @@ import Grid from '@mui/material/Grid';
 const socket = io(`${import.meta.env.VITE_BASE_URL}`);
 
 export default function RoomPage() {
+    const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -34,24 +36,37 @@ export default function RoomPage() {
 
     const messagesEndRef = useRef(null);
 
-    // Funzione per scrollare automaticamente al fondo dei messaggi
     const scrollToBottom = (options) => {
-        messagesEndRef.current?.scrollIntoView( options );
+        messagesEndRef.current?.scrollIntoView(options);
     };
 
     useEffect(() => {
-        scrollToBottom({behavior: "smooth"});
+        scrollToBottom({ behavior: "smooth" });
     }, [messages]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await api.get(`/api/rooms/${roomID}`);
-                setRoomData(response.data);
+                const [roomResponse, profileResponse] = await Promise.all([
+                    api.get(`/api/rooms/${roomID}`),
+                    api.get('/api/users/profile', { withCredentials: true })
+                ]);
+
+                const roomData = roomResponse.data;
+                const currentUserID = profileResponse.data.user._id;
+                const isUserParticipant = roomData.participants.some(participant => participant._id === currentUserID);
+
+                if (!isUserParticipant) {
+                    console.log("non sei dentro")
+                    navigate('/rooms');
+                    return;
+                }
+                setRoomData(roomData);
+                setCurrentUser(currentUserID);
                 scrollToBottom();
                 setError(null);
             } catch (error) {
-                setError(error.response?.status === 500 ? 'Page not found' : 'Error fetching room data');
+                setError(error.response?.status === 500 ? 'Page not found' : 'Error fetching data');
             } finally {
                 setLoading(false);
             }
@@ -61,22 +76,11 @@ export default function RoomPage() {
 
         return () => {
             setRoomData(null);
+            setCurrentUser(null);
             setError(null);
         };
     }, [roomID]);
 
-    useEffect(() => {
-        const fetchCurrentUser = async () => {
-            try {
-                const profileResponse = await api.get('/api/users/profile', { withCredentials: true });
-                setCurrentUser(profileResponse.data.user._id);
-            } catch (error) {
-                console.error('Error fetching user profile:', error);
-            }
-        };
-
-        fetchCurrentUser();
-    }, []);
 
     useEffect(() => {
         socket.emit('joinRoom', { room: roomID });
@@ -289,6 +293,7 @@ export default function RoomPage() {
                                     onChange={handleMessageChange}
                                     variant="outlined"
                                     fullWidth
+                                    multiline
                                     onKeyPress={handleKeyPress}
                                     placeholder="Write a message..."
                                     sx={{ color: 'white', backgroundColor: 'white', width: '80%' }}
