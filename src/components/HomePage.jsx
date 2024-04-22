@@ -1,34 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import Navbar from './Navbar.jsx';
-import { Gauge, gaugeClasses } from '@mui/x-charts/Gauge';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import axios from 'axios';
 import api from '../services/api';
+import { BarChart } from '@mui/x-charts/BarChart';
+import { Box } from '@mui/system';
 
 const HomePage = () => {
-    const [gaugeValue, setGaugeValue] = useState(0);
-    const [totalRooms, setTotalRooms] = useState(0);
-    const [loading, setLoading] = useState(true); // Stato di caricamento
-    const isMobile = useMediaQuery('(max-width:600px)');
+    const [loading, setLoading] = useState(true);
+    const [userData, setUserData] = useState(null);
+    const [roomsData, setRoomsData] = useState(null);
+    const [subjectsCount, setSubjectsCount] = useState([]);
+
+    const chartSetting = {
+        xAxis: [
+            {
+                label: 'Numero di Stanze',
+            },
+        ],
+        width: 900,
+        height: 400,
+    };
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetching the number of rooms the user belongs to
-                const response = await api.get('api/users/profile', { withCredentials: true });
-                const userData = response.data.user;
-                const roomsCount = userData.rooms.length;
-                setGaugeValue(roomsCount);
+                const userResponse = await api.get('api/users/profile', { withCredentials: true });
+                const userData = userResponse.data.user;
+                setUserData(userData);
 
-                // Fetching the total number of rooms
-                const totalRoomsResponse = await api.get('api/rooms/all');
-                const totalRoomsData = totalRoomsResponse.data;
-                const totalRoomsCount = totalRoomsData.length;
-                setTotalRooms(totalRoomsCount);
+                const roomsResponse = await api.get('api/rooms');
+                const roomsData = roomsResponse.data;
+                setRoomsData(roomsData);
 
-                // Imposta lo stato di caricamento su false dopo aver completato il caricamento dei dati
+                const allSubjects = roomsData.flatMap(room => room.subject);
+                const subjectsCountObj = allSubjects.reduce((acc, subject) => {
+                    const existingSubject = acc.find(item => item.subject === subject);
+                    if (existingSubject) {
+                        existingSubject.count += 1;
+                    } else {
+                        acc.push({ subject, count: 1 });
+                    }
+                    return acc;
+                }, []);
+                setSubjectsCount(subjectsCountObj);
+                console.log(subjectsCountObj)
+
                 setLoading(false);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -38,38 +54,23 @@ const HomePage = () => {
         fetchData();
     }, []);
 
-    // Se lo stato di caricamento è true, visualizza un messaggio di caricamento
     if (loading) {
         return <Typography variant="h6">Loading...</Typography>;
     }
 
-    // Altrimenti, mostra il grafico e i dati
     return (
         <>
             <Navbar position="static" />
-            <Container style={{ marginBottom: '120px' }}>
-                <div style={{ width: '100%', height: isMobile ? '300px' : '300px', maxHeight: '500px', margin: 'auto', marginTop: 40 }}>
-                    <Gauge
-                        value={gaugeValue}
-                        valueMax={totalRooms}
-                        startAngle={-110}
-                        endAngle={110}
-                        sx={{
-                            [`& .${gaugeClasses.valueText}`]: {
-                                fontSize: isMobile ? '30px' : '40px',
-                                transform: 'translate(0px, 0px)',
-                            },
-                            [`& .${gaugeClasses.valueArc}`]: {
-                                fill: '#52b202',
-                            },
-                        }}
-                        text={({ value, valueMax }) => `${value} / ${valueMax}`}
-                    />
-                </div>
-                <Typography variant="h6" align="center" style={{ color: '#52b202', marginTop: '5px' }}>
-                    Stanze a cui appartieni
-                </Typography>
-            </Container>
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <BarChart
+                    dataset={subjectsCount}
+                    yAxis={[{ scaleType: 'band', dataKey: 'subject' }]}
+                    series={[{ dataKey: 'count', label: 'Numero di stanze' }]}
+                    layout="horizontal"
+                    width={chartSetting.width} // Passa la larghezza come numero
+                    height={chartSetting.height}
+                />
+            </Box>
         </>
     );
 };
