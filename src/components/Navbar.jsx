@@ -18,7 +18,7 @@ import api from '../services/api';
 const pages = ['Rooms', 'Users'];
 const settings = ['Profile', 'Logout'];
 
-function ResponsiveAppBar({position}) {
+function ResponsiveAppBar({ position }) {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [userRooms, setUserRooms] = useState([]);
@@ -58,7 +58,7 @@ function ResponsiveAppBar({position}) {
     const fetchUserProfile = async () => {
       try {
         const response = await api.get('api/users/profile', { withCredentials: true });
-        console.log(response.data);
+        //console.log(response.data);
         setUserProfile(response.data.user);
       } catch (error) {
         console.error('Errore durante il recupero del profilo:', error);
@@ -98,6 +98,7 @@ function ResponsiveAppBar({position}) {
             variant="h6"
             noWrap
             component="a"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
