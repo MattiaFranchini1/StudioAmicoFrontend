@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import Navbar from './Navbar.jsx';
-import { Box, Grid, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Snackbar, Alert } from '@mui/material';
+import { Box, Grid, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, MenuItem, Snackbar, Alert, Divider, Avatar } from '@mui/material';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -12,6 +12,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import dayjs from 'dayjs';
 import api from '../services/api';
+import { dateCalendarClasses } from '@mui/x-date-pickers';
+import { Link } from 'react-router-dom';
+
 
 const HomePage = () => {
     const [openAddEventDialog, setOpenAddEventDialog] = useState(false);
@@ -21,14 +24,84 @@ const HomePage = () => {
     const [titleOptions, setTitleOptions] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null); // Stato per memorizzare l'evento selezionato
     const [showToast, setShowToast] = useState(false); // Stato per mostrare/nascondere il toast
+    const [messagesArray, setMessagesArray] = useState([]);
+    const [username_loggato, setusername_loggato] = useState([]);
 
     // Funzione asincrona per ottenere le opzioni del titolo dalla chiamata API
     const fetchOptions = async () => {
         try {
             const response = await api.get('api/rooms', { withCredentials: true });
             setTitleOptions(response.data); // Memorizza le opzioni del titolo nello stato
+            console.log(response.data)
+            const messagesArray = response.data.reduce((acc, room) => {
+                const roomMessages = room.messages.map(message => message);
+                return acc.concat(roomMessages);
+            }, []);
+
+            // Ordina gli oggetti dei messaggi per timestamp
+            messagesArray.sort((a, b) => {
+                // Converti i timestamp in oggetti Date per consentire un ordinamento corretto
+                const dateA = new Date(a.timestamp);
+                const dateB = new Date(b.timestamp);
+                // Ordina in base al timestamp
+                return dateB - dateA;
+            });
+
+            console.log(messagesArray);
+            setMessagesArray(messagesArray)
+            await fetchUserDetails(messagesArray);
+
         } catch (error) {
             console.error('Errore durante il recupero delle opzioni del titolo:', error);
+        }
+    };
+
+    const fetchUserDetails = async (messages) => {
+        try {
+            // Ottieni gli ID univoci degli utenti e delle stanze da tutti i messaggi
+            const userIds = Array.from(new Set(messages.map(message => message.sender_user)));
+            const roomIds = Array.from(new Set(messages.map(message => message.room)));
+
+            // Ottieni i dettagli degli utenti per ciascun ID
+            const userDetailsPromises = userIds.map(userId => api.get(`/api/users/${userId}`));
+            const roomsDetailsPromises = roomIds.map(roomId => api.get(`/api/rooms/${roomId}`));
+
+            // Attendi il completamento di tutte le chiamate API
+            const userDetailsResponses = await Promise.all(userDetailsPromises);
+            const roomsDetailsResponses = await Promise.all(roomsDetailsPromises);
+
+            // Costruisci un mappaggio degli ID utente ai dettagli dell'utente
+            const userDetailsMap = userDetailsResponses.reduce((map, response) => {
+                const user = response.data;
+                map[user._id] = user;
+                return map;
+            }, {});
+
+            // Costruisci un mappaggio degli ID stanza ai dettagli della stanza
+            const roomsDetailsMap = roomsDetailsResponses.reduce((map, response) => {
+                const room = response.data;
+                map[room._id] = room;
+                return map;
+            }, {});
+
+            // Aggiorna i dettagli degli utenti e delle stanze per ciascun messaggio
+            const updatedMessages = messages.map(message => {
+                const user = userDetailsMap[message.sender_user];
+                const room = roomsDetailsMap[message.room];
+                console.log(room)
+                return {
+                    ...message,
+                    sender_name: user.username,
+                    sender_profile_image: user.profile_image_url,
+                    room_name: room.room_name // Aggiungi il nome della stanza al messaggio
+                };
+            });
+
+            // Aggiorna lo stato dei messaggi con i dettagli aggiornati degli utenti e delle stanze
+            setMessagesArray(updatedMessages);
+            console.log(updatedMessages);
+        } catch (error) {
+            console.error('Errore durante il recupero dei dettagli degli utenti e delle stanze:', error);
         }
     };
 
@@ -43,6 +116,7 @@ const HomePage = () => {
         try {
             const profileResponse = await api.get('/api/users/profile');
             const userId = profileResponse.data.user._id;
+            setusername_loggato(profileResponse.data.user.username)
             const eventsResponse = await api.get(`/api/users/${userId}/events`);
             const events = eventsResponse.data;
             setCalendarEvents(events);
@@ -112,31 +186,86 @@ const HomePage = () => {
     return (
         <>
             <Navbar position="static" />
-            <Box p={3}>
+            <Box p={3} >
                 <Grid container spacing={3}>
+                    <Box p={3}>
+                        <Grid container spacing={3} >
+                            <Grid item xs={9}> {/* Tre quarti della pagina */}
+                                <FullCalendar
+                                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                                    initialView="dayGridMonth"
+                                    events={calendarEvents}
+                                    headerToolbar={{
+                                        left: 'prev,next today',
+                                        center: 'title',
+                                        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                                    }}
+                                    buttonText={{
+                                        today: 'Oggi',
+                                        month: 'Mese',
+                                        week: 'Settimana',
+                                        day: 'Giorno',
+                                    }}
+                                    height="auto"
+                                    eventClick={handleEventClick}
+                                />
+                            </Grid>
+                            <Grid item xs={3}> {/* Un quarto della pagina */}
+                                <Box bgcolor="#212121" p={2} height="100%" overflow="auto">
+                                    <Typography variant="h6" gutterBottom style={{ color: '#ffffff' }}>Ultimi aggiornamenti dalle tue stanze...</Typography>
+                                    <div style={{ marginBottom: '10px' }}>
+                                        <Divider style={{ backgroundColor: '#64b5f6' }} />
+                                    </div>
+                                    {messagesArray.slice().filter(message => message.sender_name !== username_loggato).slice(0, 5).map(message => (
+                                        <div key={message._id} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#424242', borderRadius: '5px' }}>
+                                            <Grid container alignItems="center" spacing={2}>
+                                                {/* Avatar */}
+                                                <Grid item>
+                                                    <Avatar src={message.sender_profile_image} alt="Avatar" />
+                                                </Grid>
+                                                {/* Informazioni e messaggio */}
+                                                <Grid item xs>
+                                                    <Link
+                                                        to={`/room/${message.room}`}
+                                                        style={{
+                                                            textDecoration: 'none',
+                                                            color: 'inherit',
+                                                            borderBottom: '1px solid transparent',
+                                                            transition: 'border-color 0.2s',
+                                                        }}
+                                                        onMouseOver={(e) => (e.currentTarget.style.borderColor = '#2196f3')}
+                                                        onMouseOut={(e) => (e.currentTarget.style.borderColor = 'transparent')}
+                                                    >
+                                                        <Typography variant="subtitle1" style={{ color: '#ffffff' }}>
+                                                            {message.room_name}
+                                                        </Typography>
+                                                    </Link>
+                                                    <Typography variant="body2" style={{ color: '#ffffff' }}>
+                                                        <span style={{ color: '#64b5f6' }}> • </span> {message.sender_name}
+                                                    </Typography>
+                                                    <Typography variant="body2" style={{ color: '#ffffff' }}>
+                                                        {message.content}
+                                                    </Typography>
+                                                </Grid>
+                                                {/* Ora */}
+                                                <Grid item>
+                                                    <Typography variant="body2" style={{ color: '#ffffff' }}>
+                                                        {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </Typography>
+                                                </Grid>
+                                            </Grid>
+                                        </div>
+                                    ))}
+
+                                </Box>
+
+
+                            </Grid>
+                        </Grid>
+                    </Box>
+
                     <Grid item xs={12}>
                         <Button variant="contained" color="primary" onClick={handleOpenAddEventDialog}>Aggiungi nuovo evento</Button>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <FullCalendar
-                            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-                            initialView="dayGridMonth"
-                            events={calendarEvents}
-                            headerToolbar={{
-                                left: 'prev,next today',
-                                center: 'title',
-                                right: 'dayGridMonth,timeGridWeek,timeGridDay',
-                            }}
-                            buttonText={{
-                                today: 'Oggi',
-                                month: 'Mese',
-                                week: 'Settimana',
-                                day: 'Giorno',
-                            }}
-                            height="auto"
-                            // Aggiungi il gestore degli eventi per il click sugli eventi
-                            eventClick={handleEventClick}
-                        />
                     </Grid>
                 </Grid>
             </Box>
