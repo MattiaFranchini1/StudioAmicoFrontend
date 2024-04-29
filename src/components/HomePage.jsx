@@ -26,6 +26,7 @@ const HomePage = () => {
     const [showToast, setShowToast] = useState(false); // Stato per mostrare/nascondere il toast
     const [messagesArray, setMessagesArray] = useState([]);
     const [username_loggato, setusername_loggato] = useState([]);
+    const [visibleMessagesCount, setVisibleMessagesCount] = useState(5);
 
     // Funzione asincrona per ottenere le opzioni del titolo dalla chiamata API
     const fetchOptions = async () => {
@@ -211,12 +212,12 @@ const HomePage = () => {
                                 />
                             </Grid>
                             <Grid item xs={3}> {/* Un quarto della pagina */}
-                                <Box bgcolor="#212121" p={2} height="100%" overflow="auto">
+                                <Box bgcolor="#212121" p={2} maxHeight={500} overflow="auto">
                                     <Typography variant="h6" gutterBottom style={{ color: '#ffffff' }}>Ultimi aggiornamenti dalle tue stanze...</Typography>
                                     <div style={{ marginBottom: '10px' }}>
                                         <Divider style={{ backgroundColor: '#64b5f6' }} />
                                     </div>
-                                    {messagesArray.slice().filter(message => message.sender_name !== username_loggato).slice(0, 5).map(message => (
+                                    {messagesArray.slice().filter(message => message.sender_name !== username_loggato).slice(0, visibleMessagesCount).map(message => (
                                         <div key={message._id} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#424242', borderRadius: '5px' }}>
                                             <Grid container alignItems="center" spacing={2}>
                                                 {/* Avatar */}
@@ -256,6 +257,12 @@ const HomePage = () => {
                                             </Grid>
                                         </div>
                                     ))}
+
+                                    {visibleMessagesCount < messagesArray.length && (
+                                        <Button onClick={() => setVisibleMessagesCount(prevCount => prevCount + 5)}>
+                                            Mostra altri
+                                        </Button>
+                                    )}
 
                                 </Box>
 
