@@ -26,7 +26,6 @@ const UserProfile = () => {
     const [openModal, setOpenModal] = useState(false);
     const [bioEditValue, setBioEditValue] = useState('');
 
-
     const handleOpenModal = () => {
         setOpenModal(true);
     };
@@ -35,18 +34,23 @@ const UserProfile = () => {
         setOpenModal(false);
     };
 
-
     const handleBioEditChange = (event) => {
         setBioEditValue(event.target.value);
     };
 
-    const handleSaveBio = () => {
-        console.log('Salva la nuova bio:', bioEditValue);
-        setUserData((prevUserData) => ({
-            ...prevUserData,
-            bio: bioEditValue,
-        }));
+    const updateUserBio = async (userId, newData) => {
+        try {
+            const response = await api.put(`/api/users/${userId}`, newData, { withCredentials: true });
+            const updatedUserData = response.data;
+            setUserData(updatedUserData);
+        } catch (error) {
+            console.error('Error updating user bio:', error);
+        }
+    };
 
+    const handleSaveBio = () => {
+        console.log('Save the new bio:', bioEditValue);
+        updateUserBio(id, { bio: bioEditValue });
         handleCloseModal();
     };
 
@@ -62,18 +66,14 @@ const UserProfile = () => {
                 const profileData = profileResponse.data.user;
                 setBioEditValue(userData.bio || '');
 
-                console.log(userData);
-                console.log(profileData._id, id);
-
                 setUserData(userData);
 
                 if (profileData._id === id) {
-                    console.log('sono io!');
                     setIsProfile(true);
                 }
 
             } catch (error) {
-                console.error('Errore nel recupero dei dati dell\'utente o del profilo', error);
+                console.error('Error fetching user data or profile:', error);
             } finally {
                 setLoading(false);
             }
@@ -83,10 +83,8 @@ const UserProfile = () => {
     }, [id]);
 
     useEffect(() => {
-        console.log('Valore aggiornato di isProfile:', isProfile);
+        console.log('Updated value of isProfile:', isProfile);
     }, [isProfile]);
-
-
 
     if (loading) {
         return (
@@ -99,7 +97,7 @@ const UserProfile = () => {
             >
                 <CircularProgress color="primary" size={80} thickness={4} />
                 <Typography variant="h6" color="white" style={{ marginTop: 16 }}>
-                    Caricamento del profilo in corso...
+                    Loading profile...
                 </Typography>
             </Box>
         );
@@ -198,7 +196,6 @@ const UserProfile = () => {
                         </Button>
                     </DialogActions>
                 </Dialog>
-
             </Grid>
         </>
     );
