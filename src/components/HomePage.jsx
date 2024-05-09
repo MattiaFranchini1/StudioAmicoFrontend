@@ -145,10 +145,7 @@ const HomePage = () => {
 
     const handleAddEvent = async () => {
         try {
-            // Effettua la chiamata API per aggiungere un nuovo evento
-            const profileResponse = await api.get('/api/users/profile');
-            const userId = profileResponse.data.user._id;
-            const response = await api.post(`/api/users/${userId}/events`, {
+            const response = await api.post(`/api/users/events`, {
                 title: newEvent.title,
                 start: newEvent.start,
                 end: newEvent.end
@@ -218,7 +215,7 @@ const HomePage = () => {
                                         <Divider style={{ backgroundColor: '#64b5f6' }} />
                                     </div>
                                     {messagesArray.slice().filter(message => message.sender_name !== username_loggato).slice(0, visibleMessagesCount).map(message => (
-                                        <div key={message._id} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#424242', borderRadius: '5px' }}>
+                                        <div key={message._id} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#424242', borderRadius: '5px', wordWrap: 'break-word' }}>
                                             <Grid container alignItems="center" spacing={2}>
                                                 {/* Avatar */}
                                                 <Grid item>
