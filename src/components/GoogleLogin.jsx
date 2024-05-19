@@ -24,7 +24,7 @@ const GoogleLoginButton = () => {
         mb={4}
         sx={{
           fontWeight: 700,
-          color: '#1976d2',
+          color: '#76ABAE',
           marginTop: "6vh",
         }}
       >
@@ -53,10 +53,9 @@ const GoogleLoginButton = () => {
 
           <Button
             variant="contained"
-            color="primary"
             onClick={handleGoogleLogin}
             startIcon={<AccountCircleIcon />}
-            sx={{ mt: 2 }}
+            sx={{ mt: 2, backgroundColor: '#76ABAE' }}
           >
             Accedi con Google
           </Button>
@@ -69,7 +68,7 @@ const GoogleLoginButton = () => {
           </div>
 
           <div style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
-            <InfoIcon fontSize="small" color="primary" sx={{ marginRight: 0.5 }} />
+            <InfoIcon fontSize="small" sx={{ marginRight: 0.5 }} />
             <Typography variant="body2" color="text.secondary" align="center" style={{ marginLeft: "5px" }}>
               Nessuna informazione verrà condivisa.
             </Typography>
