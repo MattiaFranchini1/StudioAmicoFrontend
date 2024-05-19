@@ -128,7 +128,7 @@ export default function Rooms() {
     try {
       await api.post(`/api/rooms/${roomId}/join`, {}, { withCredentials: true });
       window.location.reload();
-      console.log('Unione alla stanza riuscita!');
+      //console.log('Unione alla stanza riuscita!');
     } catch (error) {
       console.error('Errore durante l\'unione alla stanza:', error);
     }
@@ -183,7 +183,10 @@ export default function Rooms() {
         </div>
 
         {showCreateRoomAlert && (
-          <Alert severity="success" variant="filled" onClose={handleCloseCreateRoomAlert} style={{ marginBottom: 20, marginTop: 20 }}>
+          <Alert variant="filled" onClose={handleCloseCreateRoomAlert} style={{ marginBottom: 20, marginTop: 20 }} sx={{
+            backgroundColor: '#31363F',
+            color: '#EEEEEE'
+          }}>
             <Typography variant="subtitle1">
               Vuoi creare tu una stanza?{' '}
               <Button
@@ -191,6 +194,13 @@ export default function Rooms() {
                 component={Link}
                 to="/create-room"
                 style={{ marginLeft: 10 }}
+                sx={{
+                  backgroundColor: '#76ABAE',
+                  color: '#EEEEEE',
+                  '&:hover': {
+                    backgroundColor: '#5C8790', // Cambia il colore durante l'hover
+                  },
+                }}
               >
                 Clicca qui
               </Button>
@@ -219,7 +229,7 @@ export default function Rooms() {
           <Grid container spacing={2}>
             {filteredRooms.map((room) => (
               <Grid item key={room._id} xs={12} sm={6} md={4} lg={3}>
-                <Card style={{ marginBottom: 15, backgroundColor: '#212121', color: '#ffffff', height: '95%' }}>
+                <Card style={{ marginBottom: 15, backgroundColor: '#31363F', color: '#eeeeee', height: '95%' }}>
                   <CardHeader
                     title={
                       <Typography
@@ -269,7 +279,7 @@ export default function Rooms() {
                       <Grid item xs={6}>
                         <Typography variant="body2" color="#ffffff" align="center">
                           <strong>Participants:</strong>
-                          <Badge badgeContent={room.participants.length} color="primary" size="small">
+                          <Badge badgeContent={room.participants.length} size="small">
                             <PeopleIcon fontSize="small" />
                           </Badge>
                         </Typography>
@@ -287,7 +297,13 @@ export default function Rooms() {
                         Già unito
                       </Typography>
                     ) : (
-                      <Button variant="outlined" color="primary" startIcon={<GroupAddOutlinedIcon />} onClick={() => handleOpenModal(room)}>
+                      <Button variant="outlined" startIcon={<GroupAddOutlinedIcon />} onClick={() => handleOpenModal(room)} sx={{
+                        backgroundColor: '#76ABAE',
+                        color: '#EEEEEE',
+                        '&:hover': {
+                          backgroundColor: '#5C8790', // Cambia il colore durante l'hover
+                        },
+                      }}>
                         Unisciti
                       </Button>
                     )}
@@ -325,6 +341,6 @@ export default function Rooms() {
 
 
       </Container>
-      </>
-      );
+    </>
+  );
 }
