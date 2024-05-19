@@ -83,7 +83,7 @@ const CreateRoom = () => {
     const handleCreateRoom = async () => {
         try {
             const response = await api.post('/api/rooms/', roomData, {withCredentials: true});
-            console.log('Room created successfully:', response.data);
+            //console.log('Room created successfully:', response.data);
             window.location.href = '/rooms';
         } catch (error) {
             console.error('Error creating room:', error);
