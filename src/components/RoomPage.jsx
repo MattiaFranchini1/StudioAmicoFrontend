@@ -82,7 +82,7 @@ export default function RoomPage() {
                 const isUserParticipant = roomData.participants.some(participant => participant._id === currentUserID);
 
                 if (!isUserParticipant) {
-                    console.log("non sei dentro")
+                    //console.log("non sei dentro")
                     navigate('/rooms');
                     return;
                 }
@@ -149,7 +149,7 @@ export default function RoomPage() {
             if (message.trim() !== '') {
                 const profileResponse = await api.get('/api/users/profile', { withCredentials: true });
                 const sender_id = profileResponse.data.user._id;
-
+                
                 socket.emit('sendMessage', { room: roomID, sender: sender_id, text: message });
                 setMessage('');
             }
@@ -173,7 +173,7 @@ export default function RoomPage() {
                 ) : (
                     <>
                         {/* Main content */}
-                        <Box sx={{ flex: 1, backgroundColor: "#202225" }}>
+                        <Box sx={{ flex: 1, backgroundColor: "#222831" }}>
                             {/* Hamburger menu button for mobile */}
                             {isMobile && (
                                 <Box
@@ -232,7 +232,7 @@ export default function RoomPage() {
                                                     <Box sx={{ marginLeft: theme.spacing(1), "&:hover": { color: '#2196f3' } }}>{participant.username}</Box>
                                                 </Box>
                                             </Link>
-                                            <Divider variant="middle" style={{ backgroundColor: '#64b5f6' }} />
+                                            <Divider variant="middle" style={{ backgroundColor: '#76ABAE' }} />
                                         </div>
                                     ))}
                                 </Box>
@@ -241,7 +241,7 @@ export default function RoomPage() {
                             {error && <div>{error}</div>}
                         </Box>
 
-                        <Box sx={{ flex: 5, backgroundColor: '#2f3136', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                        <Box sx={{ flex: 5, backgroundColor: '#31363F', display: 'flex', flexDirection: 'column', position: 'relative' }}>
                             {/* Room header */}
                             <Box sx={{ padding: theme.spacing(2), textAlign: 'center' }}>
                                 <Typography variant="h4" sx={{ color: 'white' }}>
@@ -250,7 +250,7 @@ export default function RoomPage() {
                             </Box>
 
                             <Box sx={{ flexGrow: 1, overflowY: 'auto', padding: theme.spacing(2) }}>
-                                <Box sx={{ position: 'fixed', zIndex: 999, backgroundColor: '#202225', width: isMobile ? '75%' : '80%' }}>
+                                <Box sx={{ position: 'fixed', zIndex: 999, backgroundColor: '#222831', width: isMobile ? '75%' : '80%' }}>
                                     <Alert variant="outlined" icon={false} severity="info">
 
 
@@ -281,11 +281,11 @@ export default function RoomPage() {
                                                 {message.sender_user.username.charAt(0)}
                                             </Avatar>
                                         </div>
-                                        <div onMouseEnter={() => handleMouseEnter(message._id)} onMouseLeave={handleMouseLeave} style={{ backgroundColor: '#202225', borderRadius: '16px', padding: '8px', maxWidth: '50%' }}> {/* Aggiunto borderRadius */}
+                                        <div onMouseEnter={() => handleMouseEnter(message._id)} onMouseLeave={handleMouseLeave} style={{ backgroundColor: '#222831', borderRadius: '16px', padding: '8px', maxWidth: '50%' }}> {/* Aggiunto borderRadius */}
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: message.sender_user._id === currentUser ? 'flex-end' : 'flex-start', marginBottom: theme.spacing(1) }}>
                                                 {message.sender_user._id !== currentUser && (
                                                     <>
-                                                        <Typography variant="body2" sx={{ color: '#539fec', marginRight: theme.spacing(1) }}>{message.sender_user.username}</Typography>
+                                                        <Typography variant="body2" sx={{ color: '#76ABAE', marginRight: theme.spacing(1) }}>{message.sender_user.username}</Typography>
                                                         {highlightedMessage === message._id && (
                                                             <IconButton size="small" onClick={(event) => handleMenuOpen(event, message._id)} sx={{ color: 'white' }}>
                                                                 <MoreVertIcon />
@@ -339,7 +339,7 @@ export default function RoomPage() {
                                                                 Elimina
                                                             </MenuItem>
                                                         </Menu>
-                                                        <Typography variant="body2" sx={{ color: '#539fec', marginLeft: theme.spacing(1) }}>{message.sender_user.username} (TU)</Typography>
+                                                        <Typography variant="body2" sx={{ color: '#76ABAE', marginLeft: theme.spacing(1) }}>{message.sender_user.username} (TU)</Typography>
                                                     </>
                                                 )}
                                             </div>
@@ -361,7 +361,7 @@ export default function RoomPage() {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    backgroundColor: '#2f3136',
+                                    backgroundColor: '#31363F',
                                     padding: theme.spacing(1),
                                     borderTop: '1px solid #ccc',
                                     position: 'sticky',
@@ -380,7 +380,7 @@ export default function RoomPage() {
                                     sx={{ color: 'white', backgroundColor: 'white', width: '80%' }}
                                     inputProps={{ style: { maxHeight: '40px' } }}
                                 />
-                                <IconButton color="primary" onClick={handleSendMessage} sx={{ marginLeft: theme.spacing(1) }}>
+                                <IconButton onClick={handleSendMessage} sx={{ marginLeft: theme.spacing(1) , backgroundColor: '#76ABAE'}}>
 
                                     <SendIcon />
                                 </IconButton>
