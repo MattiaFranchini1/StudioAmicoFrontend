@@ -49,7 +49,7 @@ const UserProfile = () => {
     };
 
     const handleSaveBio = () => {
-        console.log('Save the new bio:', bioEditValue);
+        //console.log('Save the new bio:', bioEditValue);
         updateUserBio(id, { bio: bioEditValue });
         handleCloseModal();
     };
@@ -83,7 +83,7 @@ const UserProfile = () => {
     }, [id]);
 
     useEffect(() => {
-        console.log('Updated value of isProfile:', isProfile);
+        //console.log('Updated value of isProfile:', isProfile);
     }, [isProfile]);
 
     if (loading) {
@@ -120,7 +120,7 @@ const UserProfile = () => {
                         />
                         {isProfile && (
                             <Box marginTop={2}>
-                                <Button variant="outlined" onClick={handleOpenModal}>Edit profile</Button>
+                                <Button sx={{backgroundColor: '#76ABAE', color: '#EEEEEE'}} onClick={handleOpenModal}>Edit profile</Button>
                             </Box>
                         )}
                     </Box>
