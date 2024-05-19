@@ -33,7 +33,7 @@ const HomePage = () => {
         try {
             const response = await api.get('api/rooms', { withCredentials: true });
             setTitleOptions(response.data); // Memorizza le opzioni del titolo nello stato
-            console.log(response.data)
+            //console.log(response.data)
             const messagesArray = response.data.reduce((acc, room) => {
                 const roomMessages = room.messages.map(message => message);
                 return acc.concat(roomMessages);
@@ -48,7 +48,7 @@ const HomePage = () => {
                 return dateB - dateA;
             });
 
-            console.log(messagesArray);
+            //console.log(messagesArray);
             setMessagesArray(messagesArray)
             await fetchUserDetails(messagesArray);
 
@@ -89,7 +89,7 @@ const HomePage = () => {
             const updatedMessages = messages.map(message => {
                 const user = userDetailsMap[message.sender_user];
                 const room = roomsDetailsMap[message.room];
-                console.log(room)
+                //console.log(room)
                 return {
                     ...message,
                     sender_name: user.username,
@@ -100,7 +100,7 @@ const HomePage = () => {
 
             // Aggiorna lo stato dei messaggi con i dettagli aggiornati degli utenti e delle stanze
             setMessagesArray(updatedMessages);
-            console.log(updatedMessages);
+            //console.log(updatedMessages);
         } catch (error) {
             console.error('Errore durante il recupero dei dettagli degli utenti e delle stanze:', error);
         }
@@ -206,16 +206,21 @@ const HomePage = () => {
                                     }}
                                     height="auto"
                                     eventClick={handleEventClick}
+                                    dayHeaderContent={(arg) => (
+                                        <span style={{ color: '#222831' }}>
+                                            {arg.text}
+                                        </span>
+                                    )}
                                 />
                             </Grid>
                             <Grid item xs={3}> {/* Un quarto della pagina */}
-                                <Box bgcolor="#212121" p={2} maxHeight={500} overflow="auto">
+                                <Box bgcolor="#31363F" p={2} maxHeight={500} overflow="auto">
                                     <Typography variant="h6" gutterBottom style={{ color: '#ffffff' }}>Ultimi aggiornamenti dalle tue stanze...</Typography>
                                     <div style={{ marginBottom: '10px' }}>
-                                        <Divider style={{ backgroundColor: '#64b5f6' }} />
+                                        <Divider style={{ backgroundColor: '#76ABAE' }} />
                                     </div>
                                     {messagesArray.slice().filter(message => message.sender_name !== username_loggato).slice(0, visibleMessagesCount).map(message => (
-                                        <div key={message._id} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#424242', borderRadius: '5px', wordWrap: 'break-word' }}>
+                                        <div key={message._id} style={{ marginBottom: '10px', padding: '10px', backgroundColor: '#222831', borderRadius: '5px', wordWrap: 'break-word' }}>
                                             <Grid container alignItems="center" spacing={2}>
                                                 {/* Avatar */}
                                                 <Grid item>
@@ -234,20 +239,20 @@ const HomePage = () => {
                                                         onMouseOver={(e) => (e.currentTarget.style.borderColor = '#2196f3')}
                                                         onMouseOut={(e) => (e.currentTarget.style.borderColor = 'transparent')}
                                                     >
-                                                        <Typography variant="subtitle1" style={{ color: '#ffffff' }}>
+                                                        <Typography variant="subtitle1" style={{ color: '#EEEEEE' }}>
                                                             {message.room_name}
                                                         </Typography>
                                                     </Link>
-                                                    <Typography variant="body2" style={{ color: '#ffffff' }}>
+                                                    <Typography variant="body2" style={{ color: '#EEEEEE' }}>
                                                         <span style={{ color: '#64b5f6' }}> • </span> {message.sender_name}
                                                     </Typography>
-                                                    <Typography variant="body2" style={{ color: '#ffffff' }}>
+                                                    <Typography variant="body2" style={{ color: '#EEEEEE' }}>
                                                         {message.content}
                                                     </Typography>
                                                 </Grid>
                                                 {/* Ora */}
                                                 <Grid item>
-                                                    <Typography variant="body2" style={{ color: '#ffffff' }}>
+                                                    <Typography variant="body2" style={{ color: '#EEEEEE' }}>
                                                         {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                                     </Typography>
                                                 </Grid>
@@ -256,7 +261,7 @@ const HomePage = () => {
                                     ))}
 
                                     {visibleMessagesCount < messagesArray.length && (
-                                        <Button onClick={() => setVisibleMessagesCount(prevCount => prevCount + 5)}>
+                                        <Button sx={{ color: '#76ABAE' }} onClick={() => setVisibleMessagesCount(prevCount => prevCount + 5)}>
                                             Mostra altri
                                         </Button>
                                     )}
@@ -269,7 +274,12 @@ const HomePage = () => {
                     </Box>
 
                     <Grid item xs={12}>
-                        <Button variant="contained" color="primary" onClick={handleOpenAddEventDialog}>Aggiungi nuovo evento</Button>
+                        <Button variant="contained" onClick={handleOpenAddEventDialog} sx={{
+                            backgroundColor: '#76ABAE',
+                            '&:hover': {
+                                backgroundColor: '#5C8790', // Cambia il colore durante l'hover
+                            },
+                        }}>Aggiungi nuovo evento</Button>
                     </Grid>
                 </Grid>
             </Box>
