@@ -41,7 +41,7 @@ const UserCard = ({ user }) => {
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={3} key={_id}>
-      <Card style={{ backgroundColor: '#212121', color: '#ffffff' }}>
+      <Card style={{ backgroundColor: '#31363F', color: '#ffffff' }}>
         <CardActionArea style={{ padding: '1vh' }}>
           <Avatar
             alt={username}
@@ -51,7 +51,7 @@ const UserCard = ({ user }) => {
               height: 'auto',
               margin: '0 auto',
               border: '1.0px solid #64b5f6',
-              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+              boxShadow: '0px 4px 8px #76ABAE',
             }}
             onError={() => setImageError(true)}
           >
@@ -67,26 +67,26 @@ const UserCard = ({ user }) => {
               {`Utente da ${formatDate(registered_at)}`}
             </Typography>
 
-            <Divider variant="fullWidth" style={{ margin: '10px 0', backgroundColor: '#64b5f6' }} />
+            <Divider variant="fullWidth" style={{ margin: '10px 0', backgroundColor: '#76ABAE' }} />
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-              <Typography variant="subtitle2" color="#64b5f6">
+              <Typography variant="subtitle2" color="#76ABAE">
                 Teaching Stats
               </Typography>
               <Rating name="read-only" value={teaching_review_total_stars / teaching_review_total_number} readOnly size="small" precision={0.5} />
-              <Typography variant="subtitle2" color="#64b5f6">
+              <Typography variant="subtitle2" color="#76ABAE">
                 ({teaching_review_total_number})
               </Typography>
             </div>
 
-            <Divider variant="middle" style={{ margin: '10px', backgroundColor: '#64b5f6' }} />
+            <Divider variant="middle" style={{ margin: '10px', backgroundColor: '#76ABAE' }} />
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
-              <Typography variant="subtitle2" color="#64b5f6">
+              <Typography variant="subtitle2" color="#76ABAE">
                 Learning Stats
               </Typography>
               <Rating name="read-only" value={learning_review_total_stars / learning_review_total_number} readOnly size="small" precision={0.5} />
-              <Typography variant="subtitle2" color="#64b5f6">
+              <Typography variant="subtitle2" color="#76ABAE">
                 ({learning_review_total_number})
               </Typography>
             </div>
