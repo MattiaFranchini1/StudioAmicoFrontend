@@ -91,7 +91,7 @@ function ResponsiveAppBar({ position }) {
   };
 
   return (
-    <AppBar position={position}>
+    <AppBar position={position} sx={{ backgroundColor: '#76ABAE' }}>
       <Container maxWidth="xxl">
         <Toolbar disableGutters>
           <Typography
@@ -105,7 +105,7 @@ function ResponsiveAppBar({ position }) {
               fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.2rem',
-              color: 'black',
+              color: '#222831',
               textDecoration: 'none',
             }}
           >
@@ -162,7 +162,7 @@ function ResponsiveAppBar({ position }) {
               </MenuItem>
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <Link to={`/${page.toLowerCase()}`} style={{ textDecoration: 'none', color: '#EEEEEE' }}>
                     <Typography textAlign="center">{page}</Typography>
                   </Link>
                 </MenuItem>
